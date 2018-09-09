@@ -56,7 +56,7 @@ class Sunday_School {
     // add pdf converter function via pdf-Plugin
 
     if (shortcode_exists('dkpdf-button')) {
-      $res .= '<span class="pdf_invisible">' . do_shortcode('[dkpdf-button]') .'</span>';
+      $res .= '<div class="pdf_invisible" style="display: flex;">' . do_shortcode('[dkpdf-button]') .'</div>';
     }
 
     // convert posts into group list
@@ -65,8 +65,15 @@ class Sunday_School {
     // each group - one block on the page
     // $res .= print_r($groups, TRUE);
     foreach ($groups->getGroups() as $group) {
-      $res .= ("<h2>" . $group->getName() . "</h2>");
+      // $res .= ("<h2>" . $group->getName() . "</h2>");
+
+      if(shortcode_exists('csv_it')) {
+        $res .= '[csv_it separator=";"]';
+      }
+
       $res .= "<table width='100%'>";
+
+      $res .= ("<tr><th colspan='4'>" . "<h2>" . $group->getName() . "</h2>" . "</th></tr>");
 
       $res .= "<tr>
         <th>Имя ребенка</th>
@@ -86,9 +93,14 @@ class Sunday_School {
       }
 
       $res .= "</table>";
+
+      if(shortcode_exists('csv_it')) {
+        $res .= '[/csv_it]';
+      }
+
     }
 
-    return $res;
+    return do_shortcode($res);
   }
 
   /*
